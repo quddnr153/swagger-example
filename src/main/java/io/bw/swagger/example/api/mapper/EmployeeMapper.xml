@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.bw.swagger.example.api.mapper.EmployeeMapper">
+    <select id="selectEmployeeByName" parameterType="string" resultType="io.bw.swagger.example.api.model.Employee">
+        SELECT employee_seq AS employeeSeq
+             , employee_id AS employeeId
+             , employee_name AS employeeName
+             , employee_password AS employeePassword
+             , request_date AS requestDate
+             , modify_date AS modifyDate
+             , status AS status
+          FROM employee
+         WHERE employee_name = #{employeeName}
+    </select>
+
+    <select id="selectEmployeeBySeq" parameterType="long" resultType="io.bw.swagger.example.api.model.Employee">
+        SELECT employee_seq AS employeeSeq
+             , employee_id AS employeeId
+             , employee_name AS employeeName
+             , employee_password AS employeePassword
+             , request_date AS requestDate
+             , modify_date AS modifyDate
+             , status AS status
+          FROM employee
+         WHERE employee_seq = #{employeeSeq}
+    </select>
+
+    <select id="selectEmployees" resultType="io.bw.swagger.example.api.model.Employee">
+        SELECT employee_seq AS employeeSeq
+             , employee_id AS employeeId
+             , employee_name AS employeeName
+             , employee_password AS employeePassword
+             , request_date AS requestDate
+             , modify_date AS modifyDate
+             , status AS status
+          FROM employee
+    </select>
+
+    <insert id="insertEmployee" parameterType="io.bw.swagger.example.api.model.Employee">
+        INSERT INTO employee
+        (
+          employee_id
+        , employee_name
+        , employee_password
+        , request_date
+        , modify_date
+        , status
+        )
+        VALUES
+        (
+          #{employeeId}
+        , #{employeeName}
+        , #{employeePassword}
+        , #{requestDate}
+        , #{modifyDate}
+        , #{status}
+        )
+        <selectKey resultType="long" keyProperty="employeeSeq" order="AFTER">
+            CALL SCOPE_IDENTITY()
+        </selectKey>
+    </insert>
+
+    <insert id="insertEmployeeHistory" parameterType="io.bw.swagger.example.api.model.Employee">
+        INSERT INTO employee_history
+        (
+          employee_seq
+        , employee_id
+        , employee_name
+        , employee_password
+        , request_date
+        , modify_date
+        , status
+        )
+        VALUES
+        (
+          #{employeeSeq}
+        , #{employeeId}
+        , #{employeeName}
+        , #{employeePassword}
+        , #{requestDate}
+        , #{modifyDate}
+        , #{status}
+        )
+    </insert>
+
+    <update id="updateEmployee" parameterType="io.bw.swagger.example.api.model.Employee">
+        UPDATE employee
+        SET modify_date = #{modifyDate}
+        <if test='@org.apache.commons.lang3.StringUtils@isNotEmpty(employeeName)'>
+          , employee_name = #{employeeName}
+        </if>
+        <if test='@org.apache.commons.lang3.StringUtils@isNotEmpty(employeePassword)'>
+          , employee_password = #{employeePassword}
+        </if>
+        <if test='@org.apache.commons.lang3.StringUtils@isNotEmpty(status)'>
+          , status = #{status}
+        </if>
+        WHERE employee_seq = #{employeeSeq}
+    </update>
+</mapper>
