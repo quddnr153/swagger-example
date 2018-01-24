@@ -2,14 +2,17 @@ package io.bw.swagger.example.api.controller;
 
 import io.bw.swagger.example.api.bo.EmployeeBO;
 import io.bw.swagger.example.api.model.Employee;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -18,16 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
  * https://github.com/quddnr153
  */
 @RestController
+@RequestMapping("/api")
 public class EmployeeController {
     @Autowired
     private EmployeeBO employeeBO;
 
-    @RequestMapping("/api/employee")
-    public Employee getEmployee(@RequestBody final  Employee employee) {
-        return employeeBO.getEmployee(employee);
-    }
-
-    @RequestMapping("/api/employee/{seq}")
+    @ApiOperation(value = "employee 조회")
+    @ApiImplicitParam(name = "seq", value = "employee seq", required = true, dataType = "long", paramType = "path", defaultValue = "1")
+    @RequestMapping(value = "/employee/{seq}", method = RequestMethod.GET)
     public Employee getEmployeeBySeq(@PathVariable("seq") final long seq) {
         Employee employee = Employee.builder()
                                     .withSeq(seq)
@@ -35,21 +36,40 @@ public class EmployeeController {
         return employeeBO.getEmployee(employee);
     }
 
-    @RequestMapping("/api/employees")
+    @ApiOperation(value = "employee 전체조회")
+    @RequestMapping(value = "/employee", method = RequestMethod.GET)
     public List<Employee> getEmployees() {
         return employeeBO.getEmployees();
     }
 
-    @RequestMapping(value = "/api/employee", method = RequestMethod.POST)
-    public String createEmployee(@RequestBody final  Employee employee) {
-        employeeBO.createEmployee(employee);
+    @ApiOperation(value = "employee 등록")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "employee id", required = true, dataType = "String", paramType = "form", example = "TEST001"),
+            @ApiImplicitParam(name = "name", value = "employee name", required = true, dataType = "String", paramType = "form", example = "tester"),
+            @ApiImplicitParam(name = "password", value = "employee password", required = true, dataType = "String", paramType = "form", example = "test001")
+    })
+    @RequestMapping(value = "/employee", method = RequestMethod.POST)
+    public String createEmployee(@RequestParam(value = "id") final String id,
+                                 @RequestParam(value = "name") final String name,
+                                 @RequestParam(value = "password") final String password) {
+        employeeBO.createEmployee(Employee.builder().withId(id).withName(name).withPassword(password).build());
 
         return "Success";
     }
 
-    @RequestMapping(value = "/api/employee", method = RequestMethod.PUT)
-    public String modifyEmployee(@RequestBody final  Employee employee) {
-        employeeBO.modifyEmployee(employee);
+    @ApiOperation(value = "employee 수정")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "seq", value = "employee seq", required = true, dataType = "long", paramType = "form", example = "1"),
+            @ApiImplicitParam(name = "name", value = "employee name", dataType = "String", paramType = "form", example = "tester"),
+            @ApiImplicitParam(name = "password", value = "employee password", dataType = "String", paramType = "form", example = "test001"),
+            @ApiImplicitParam(name = "status", value = "employee status", dataType = "String", paramType = "form", example = "USE or DISUSE")
+    })
+    @RequestMapping(value = "/employee", method = RequestMethod.PUT)
+    public String modifyEmployee(@RequestParam(value = "seq") final long seq,
+                                 @RequestParam(value = "name") final String name,
+                                 @RequestParam(value = "password") final String password,
+                                 @RequestParam(value = "status") final String status) {
+        employeeBO.modifyEmployee(Employee.builder().withSeq(seq).withName(name).withPassword(password).withStatus(status).build());
 
         return "Success";
     }

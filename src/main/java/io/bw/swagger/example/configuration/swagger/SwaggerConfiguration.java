@@ -21,8 +21,8 @@ public class SwaggerConfiguration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/api/**"))
+                .apis(RequestHandlerSelectors.basePackage("io.bw.swagger.example.api"))
+                .paths(PathSelectors.any())
                 .build();
     }
 }

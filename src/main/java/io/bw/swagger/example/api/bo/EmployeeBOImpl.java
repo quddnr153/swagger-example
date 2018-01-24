@@ -3,6 +3,7 @@ package io.bw.swagger.example.api.bo;
 import io.bw.swagger.example.api.mapper.EmployeeMapper;
 import io.bw.swagger.example.api.model.Employee;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -41,12 +42,16 @@ public class EmployeeBOImpl implements EmployeeBO {
 
     @Transactional
     public void createEmployee(final Employee employee) {
+        employee.setRequestDate(LocalDateTime.now());
+        employee.setModifyDate(LocalDateTime.now());
+        employee.setStatus("USE");
         employeeMapper.insertEmployee(employee);
         employeeMapper.insertEmployeeHistory(employee);
     }
 
     @Transactional
     public void modifyEmployee(final Employee employee) {
+        employee.setModifyDate(LocalDateTime.now());
         employeeMapper.updateEmployee(employee);
         employeeMapper.insertEmployeeHistory(employee);
     }
