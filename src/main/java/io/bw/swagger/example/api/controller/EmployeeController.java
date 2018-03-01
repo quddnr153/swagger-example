@@ -9,9 +9,11 @@ import io.swagger.annotations.ApiOperation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +30,7 @@ public class EmployeeController {
 
     @ApiOperation(value = "employee 조회")
     @ApiImplicitParam(name = "seq", value = "employee seq", required = true, dataType = "long", paramType = "path", defaultValue = "1")
-    @RequestMapping(value = "/employee/{seq}", method = RequestMethod.GET)
+    @GetMapping(value = "/employee/{seq}")
     public Employee getEmployeeBySeq(@PathVariable("seq") final long seq) {
         Employee employee = Employee.builder()
                                     .withSeq(seq)
@@ -37,7 +39,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "employee 전체조회")
-    @RequestMapping(value = "/employee", method = RequestMethod.GET)
+    @GetMapping(value = "/employee")
     public List<Employee> getEmployees() {
         return employeeBO.getEmployees();
     }
@@ -48,7 +50,7 @@ public class EmployeeController {
             @ApiImplicitParam(name = "name", value = "employee name", required = true, dataType = "String", paramType = "form", example = "tester"),
             @ApiImplicitParam(name = "password", value = "employee password", required = true, dataType = "String", paramType = "form", example = "test001")
     })
-    @RequestMapping(value = "/employee", method = RequestMethod.POST)
+    @PostMapping(value = "/employee")
     public String createEmployee(@RequestParam(value = "id") final String id,
                                  @RequestParam(value = "name") final String name,
                                  @RequestParam(value = "password") final String password) {
@@ -64,7 +66,7 @@ public class EmployeeController {
             @ApiImplicitParam(name = "password", value = "employee password", dataType = "String", paramType = "form", example = "test001"),
             @ApiImplicitParam(name = "status", value = "employee status", dataType = "String", paramType = "form", example = "USE or DISUSE")
     })
-    @RequestMapping(value = "/employee", method = RequestMethod.PUT)
+    @PutMapping(value = "/employee")
     public String modifyEmployee(@RequestParam(value = "seq") final long seq,
                                  @RequestParam(value = "name") final String name,
                                  @RequestParam(value = "password") final String password,
