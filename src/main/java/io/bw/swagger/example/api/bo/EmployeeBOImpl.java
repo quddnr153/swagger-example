@@ -42,16 +42,12 @@ public class EmployeeBOImpl implements EmployeeBO {
 
     @Transactional
     public void createEmployee(final Employee employee) {
-        employee.setRequestDate(LocalDateTime.now());
-        employee.setModifyDate(LocalDateTime.now());
-        employee.setStatus("USE");
         employeeMapper.insertEmployee(employee);
         employeeMapper.insertEmployeeHistory(employee);
     }
 
     @Transactional
     public void modifyEmployee(final Employee employee) {
-        employee.setModifyDate(LocalDateTime.now());
         employeeMapper.updateEmployee(employee);
         employeeMapper.insertEmployeeHistory(employee);
     }

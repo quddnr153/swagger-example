@@ -54,7 +54,7 @@ public class EmployeeController {
     public String createEmployee(@RequestParam(value = "id") final String id,
                                  @RequestParam(value = "name") final String name,
                                  @RequestParam(value = "password") final String password) {
-        employeeBO.createEmployee(Employee.builder().withId(id).withName(name).withPassword(password).build());
+        employeeBO.createEmployee(Employee.builder().withId(id).withName(name).withPassword(password).withStatus("USE").build());
 
         return "Success";
     }

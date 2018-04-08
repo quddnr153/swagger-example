@@ -54,8 +54,8 @@
           #{employeeId}
         , #{employeeName}
         , #{employeePassword}
-        , #{requestDate}
-        , #{modifyDate}
+        , CURRENT_DATE()
+        , CURRENT_DATE()
         , #{status}
         )
         <selectKey resultType="long" keyProperty="employeeSeq" order="AFTER">
@@ -80,15 +80,15 @@
         , #{employeeId}
         , #{employeeName}
         , #{employeePassword}
-        , #{requestDate}
-        , #{modifyDate}
+        , CURRENT_DATE()
+        , CURRENT_DATE()
         , #{status}
         )
     </insert>
 
     <update id="updateEmployee" parameterType="io.bw.swagger.example.api.model.Employee">
         UPDATE employee
-        SET modify_date = #{modifyDate}
+        SET modify_date = CURRENT_DATE()
         <if test='@org.apache.commons.lang3.StringUtils@isNotEmpty(employeeName)'>
           , employee_name = #{employeeName}
         </if>

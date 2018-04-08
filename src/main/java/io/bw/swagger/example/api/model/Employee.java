@@ -1,7 +1,6 @@
 package io.bw.swagger.example.api.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -11,8 +10,7 @@ import java.time.LocalDateTime;
  * quddnr153@gmail.com
  * https://github.com/quddnr153
  */
-@Data
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
 public class Employee {
     private long employeeSeq;
